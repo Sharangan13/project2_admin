@@ -6,30 +6,83 @@ class AdminManagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Manage Plants and Equipment'),
+        title: Text(''),
       ),
-      body: ListView(
-        children: [
-          ListTile(
-            title: Text('Plants'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AdminPlantCategoriesPage()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text('Equipment'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AdminEquipmentPage()),
-              );
-            },
-          ),
-        ],
+      body: Container(
+        child: Row(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AdminPlantCategoriesPage(),
+                    ),
+                  );
+                },
+                child: SizedBox(
+                  height: 150,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: const Offset(0, 5),
+                          color: Theme.of(context).primaryColor.withOpacity(.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Plants',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AdminEquipmentPage(),
+                    ),
+                  );
+                },
+                child: SizedBox(
+                  height: 150,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: const Offset(0, 5),
+                          color: Theme.of(context).primaryColor.withOpacity(.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Equipment',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -48,23 +101,53 @@ class AdminPlantCategoriesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Plant Categories'),
+        title: Text('Plant Categories'),
       ),
-      body: ListView.builder(
-        itemCount: plantCategories.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(plantCategories[index]),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0, // Add a small gap between columns
+          mainAxisSpacing: 10.0, // Add a small gap between rows
+          children: List.generate(plantCategories.length, (index) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
                     builder: (context) => AdminPlantDetailsPage(
-                        category: plantCategories[index])),
-              );
-            },
-          );
-        },
+                      category: plantCategories[index],
+                    ),
+                  ),
+                );
+              },
+              child: SizedBox(
+                width: 150,
+                height: 150,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        offset: const Offset(0, 5),
+                        color: Theme.of(context).primaryColor.withOpacity(.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Text(
+                      plantCategories[index],
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
       ),
     );
   }
@@ -81,7 +164,7 @@ class AdminPlantDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Plant Details'),
+        title: Text('Plant Details'),
       ),
       body: Center(
         child: Text(
@@ -100,7 +183,7 @@ class AdminEquipmentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Equipment'),
+        title: Text('Equipment'),
       ),
       body: Center(
         child: Text(
