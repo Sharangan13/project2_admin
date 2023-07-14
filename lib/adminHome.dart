@@ -2,17 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'AdminManagePage.dart';
 import 'ConsultancyBookingDetailsPage.dart';
+import 'MyAccountPage.dart';
 import 'QrScannerPage.dart';
 import 'SeeOrdersPage.dart';
+import 'UploadPlantsEquipmentsPage.dart';
 
-class adminHome extends StatefulWidget {
-  const adminHome({Key? key}) : super(key: key);
+class AdminHome extends StatefulWidget {
+  const AdminHome({Key? key}) : super(key: key);
 
   @override
-  State<adminHome> createState() => _adminHome();
+  State<AdminHome> createState() => _AdminHomeState();
 }
 
-class _adminHome extends State<adminHome> {
+class _AdminHomeState extends State<AdminHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +24,7 @@ class _adminHome extends State<adminHome> {
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
-              borderRadius: const BorderRadius.only(
+              borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(50),
               ),
             ),
@@ -31,17 +33,21 @@ class _adminHome extends State<adminHome> {
                 const SizedBox(height: 50),
                 ListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 30),
-                  title: Text('Hello Sumo',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall
-                          ?.copyWith(color: Colors.white)),
-                  subtitle: Text('Good Morning',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(color: Colors.white54)),
-                  trailing: const CircleAvatar(
+                  title: Text(
+                    'Hello Sumo',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: Colors.white),
+                  ),
+                  subtitle: Text(
+                    'Good Morning',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: Colors.white54),
+                  ),
+                  trailing: CircleAvatar(
                     radius: 30,
                     backgroundImage: AssetImage('assets/images/prf.jpg'),
                   ),
@@ -55,9 +61,11 @@ class _adminHome extends State<adminHome> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius:
-                      BorderRadius.only(topLeft: Radius.circular(200))),
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(200),
+                ),
+              ),
               child: GridView.count(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -70,26 +78,30 @@ class _adminHome extends State<adminHome> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => QrScannerPage()),
+                          builder: (context) => QrScannerPage(),
+                        ),
                       );
-                      // Handle onTap for Qr Scanner
-                      // Add your code here
                     },
                     child: itemDashboard(
-                        'Qr Scanner', CupertinoIcons.phone, Colors.pinkAccent),
+                      'QR Scanner',
+                      CupertinoIcons.phone,
+                      Colors.pinkAccent,
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SeeOrdersPage()),
+                          builder: (context) => SeeOrdersPage(),
+                        ),
                       );
-                      // Handle onTap for Orders
-                      // Add your code here
                     },
-                    child: itemDashboard('Orders', CupertinoIcons.book_circle,
-                        Colors.deepOrange),
+                    child: itemDashboard(
+                      'Orders',
+                      CupertinoIcons.book_circle,
+                      Colors.deepOrange,
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -98,14 +110,16 @@ class _adminHome extends State<adminHome> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ConsultancyBookingDetailsPage(
-                                bookingId: bookingId)),
+                          builder: (context) => ConsultancyBookingDetailsPage(
+                              bookingId: bookingId),
+                        ),
                       );
-                      // Handle onTap for Consaltancy Booking
-                      // Add your code here
                     },
-                    child: itemDashboard('Consaltancy Booking',
-                        CupertinoIcons.graph_circle, Colors.green),
+                    child: itemDashboard(
+                      'Consultancy Booking',
+                      CupertinoIcons.graph_circle,
+                      Colors.green,
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -113,28 +127,40 @@ class _adminHome extends State<adminHome> {
                       // Add your code here
                     },
                     child: itemDashboard(
-                        'Chat', CupertinoIcons.chat_bubble_2, Colors.teal),
+                      'Chat',
+                      CupertinoIcons.chat_bubble_2,
+                      Colors.teal,
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AdminManagePage()),
+                          builder: (context) => AdminManagePage(),
+                        ),
                       );
-                      // Handle onTap for Manage Plants
-                      // Add your code here
                     },
-                    child: itemDashboard('Manage Plants and equipments',
-                        CupertinoIcons.person_2, Colors.purple),
+                    child: itemDashboard(
+                      'Manage Plants & Equipments',
+                      CupertinoIcons.person_2,
+                      Colors.purple,
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Handle onTap for Manage equipments
-                      // Add your code here
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UploadPlantsEquipmentsPage(),
+                        ),
+                      );
                     },
-                    child: itemDashboard('Upload Plants and equipments',
-                        CupertinoIcons.chat_bubble_2, Colors.brown),
+                    child: itemDashboard(
+                      'Upload Plants & Equipments',
+                      CupertinoIcons.chat_bubble_2,
+                      Colors.brown,
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -142,15 +168,19 @@ class _adminHome extends State<adminHome> {
                       // Add your code here
                     },
                     child: itemDashboard(
-                      'sale details',
+                      'Sale Details',
                       CupertinoIcons.money_dollar_circle,
                       Colors.indigo,
                     ),
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Handle onTap for My Account
-                      // Add your code here
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyAccountPage(),
+                        ),
+                      );
                     },
                     child: itemDashboard(
                       'My Account',
@@ -168,31 +198,41 @@ class _adminHome extends State<adminHome> {
     );
   }
 
-  itemDashboard(String title, IconData iconData, Color background) => Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                  offset: const Offset(0, 5),
-                  color: Theme.of(context).primaryColor.withOpacity(.2),
-                  spreadRadius: 2,
-                  blurRadius: 5)
-            ]),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: background,
-                  shape: BoxShape.circle,
+  Widget itemDashboard(String title, IconData iconData, Color background) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 5),
+            color: Theme.of(context).primaryColor.withOpacity(.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+          )
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: background,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(iconData, color: Colors.white),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            title.toUpperCase(),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
-                child: Icon(iconData, color: Colors.white)),
-            const SizedBox(height: 8),
-            Text(title.toUpperCase(),
-                style: Theme.of(context).textTheme.titleMedium)
-          ],
-        ),
-      );
+          )
+        ],
+      ),
+    );
+  }
 }

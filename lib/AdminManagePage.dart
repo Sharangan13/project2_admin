@@ -6,82 +6,87 @@ class AdminManagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: Text('Admin Management'),
       ),
       body: Container(
-        child: Row(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AdminPlantCategoriesPage(),
-                    ),
-                  );
-                },
-                child: SizedBox(
-                  height: 150,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: const Offset(0, 5),
-                          color: Theme.of(context).primaryColor.withOpacity(.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AdminPlantCategoriesPage(),
+                      ),
+                    );
+                  },
+                  child: SizedBox(
+                    height: 150,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: const Offset(0, 5),
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(.2),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Plants',
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Plants',
-                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AdminEquipmentPage(),
-                    ),
-                  );
-                },
-                child: SizedBox(
-                  height: 150,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: const Offset(0, 5),
-                          color: Theme.of(context).primaryColor.withOpacity(.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AdminEquipmentPage(),
+                      ),
+                    );
+                  },
+                  child: SizedBox(
+                    height: 150,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: const Offset(0, 5),
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(.2),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Equipment',
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Equipment',
-                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -102,6 +107,23 @@ class AdminPlantCategoriesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Plant Categories'),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(56.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search',
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -165,6 +187,23 @@ class AdminPlantDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Plant Details'),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(56.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search',
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+          ),
+        ),
       ),
       body: Center(
         child: Text(
@@ -184,6 +223,23 @@ class AdminEquipmentPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Equipment'),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(56.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search',
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+          ),
+        ),
       ),
       body: Center(
         child: Text(
