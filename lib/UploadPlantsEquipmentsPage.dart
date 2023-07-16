@@ -25,13 +25,14 @@ class _UploadPlantsEquipmentsPageState
   ];
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+  TextEditingController _nameController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _quantityController = TextEditingController();
 
   @override
   void dispose() {
+    _nameController.dispose();
     _priceController.dispose();
     _descriptionController.dispose();
     _quantityController.dispose();
@@ -81,6 +82,16 @@ class _UploadPlantsEquipmentsPageState
               _buildCategorySelection(),
               SizedBox(height: 30),
             ],
+            Text(
+              'Name',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            _buildTextField('Enter Name', _nameController),
+            SizedBox(height: 30),
             Text(
               'Price',
               style: TextStyle(
@@ -303,11 +314,13 @@ class _UploadPlantsEquipmentsPageState
   }
 
   Future<void> _handleUpload() async {
+    final String name = _nameController.text.trim();
     final String price = _priceController.text.trim();
     final String description = _descriptionController.text.trim();
     final String quantity = _quantityController.text.trim();
 
     if (selectedType.isNotEmpty &&
+        name.isNotEmpty &&
         price.isNotEmpty &&
         description.isNotEmpty &&
         quantity.isNotEmpty &&
@@ -319,7 +332,8 @@ class _UploadPlantsEquipmentsPageState
             .child('Uploaded Images')
             .child(DateTime.now().toString());
         final UploadTask uploadTask = storageRef.putFile(imageFile!);
-        await uploadTask.whenComplete(() {});
+        final TaskSnapshot uploadSnapshot =
+            await uploadTask.whenComplete(() {});
 
         // Get the image URL from Firebase Storage
         final String imageUrl = await storageRef.getDownloadURL();
@@ -336,10 +350,12 @@ class _UploadPlantsEquipmentsPageState
               .doc(category)
               .collection('Items')
               .add({
+            'name': name,
             'price': price,
             'description': description,
             'quantity': quantity,
             'image_url': imageUrl,
+            'Category': category
           });
         } else if (selectedType == 'plants' && selectedCategory.isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -352,6 +368,7 @@ class _UploadPlantsEquipmentsPageState
               .doc('equipments')
               .collection('Items')
               .add({
+            'name': name,
             'price': price,
             'description': description,
             'quantity': quantity,
@@ -365,6 +382,7 @@ class _UploadPlantsEquipmentsPageState
         );
 
         // Clear the form fields and selected image
+        _nameController.clear();
         _priceController.clear();
         _descriptionController.clear();
         _quantityController.clear();
