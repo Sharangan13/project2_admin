@@ -355,7 +355,8 @@ class _UploadPlantsEquipmentsPageState
             'description': description,
             'quantity': quantity,
             'image_url': imageUrl,
-            'Category': category
+            'Category': category,
+            'date': DateTime.now()
           });
         } else if (selectedType == 'plants' && selectedCategory.isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -373,6 +374,7 @@ class _UploadPlantsEquipmentsPageState
             'description': description,
             'quantity': quantity,
             'image_url': imageUrl,
+            'date': DateTime.now(),
           });
         }
 
