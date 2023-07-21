@@ -5,6 +5,7 @@ import 'ConsultancyBookingDetailsPage.dart';
 import 'MyAccountPage.dart';
 import 'QrScannerPage.dart';
 import 'SeeOrdersPage.dart';
+import 'SelectProductsPage.dart';
 import 'UploadPlantsEquipmentsPage.dart';
 
 class AdminHome extends StatefulWidget {
@@ -86,6 +87,21 @@ class _AdminHomeState extends State<AdminHome> {
                       'QR Scanner',
                       CupertinoIcons.phone,
                       Colors.pinkAccent,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SelectProductsPage(),
+                        ),
+                      );
+                    },
+                    child: itemDashboard(
+                      'Bill',
+                      CupertinoIcons.book_circle,
+                      Colors.deepOrange,
                     ),
                   ),
                   GestureDetector(
