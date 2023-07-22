@@ -14,6 +14,12 @@ class SelectedProductsPage extends StatefulWidget {
 }
 
 class _SelectedProductsPageState extends State<SelectedProductsPage> {
+  void _removeProductAtIndex(int index) {
+    setState(() {
+      widget.selectedProducts.removeAt(index);
+    });
+  }
+
   double _discountPercentage = 0.0;
   double _totalAmount = 0.0;
 
@@ -45,13 +51,7 @@ class _SelectedProductsPageState extends State<SelectedProductsPage> {
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () {
-                        setState(() {
-                          // Create a copy of the selectedProducts list and modify the copy
-                          List<Product> selectedProductsCopy =
-                              List.from(widget.selectedProducts);
-                          selectedProductsCopy.removeAt(index);
-                          widget.selectedProducts = selectedProductsCopy;
-                        });
+                        _removeProductAtIndex(index);
                       },
                     ),
                   );
