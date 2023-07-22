@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'Product.dart';
 
 class SelectedProductsPage extends StatefulWidget {
-  final List<Product> selectedProducts;
+  late final List<Product> selectedProducts;
 
   SelectedProductsPage({required this.selectedProducts});
 
@@ -31,8 +32,7 @@ class _SelectedProductsPageState extends State<SelectedProductsPage> {
                 itemBuilder: (context, index) {
                   final product = widget.selectedProducts[index];
                   return ListTile(
-                    leading: Image.network(product
-                        .imageURL), // Assuming you have a photo URL in the Product model
+                    leading: Image.network(product.imageURL),
                     title: Text(product.name),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +45,11 @@ class _SelectedProductsPageState extends State<SelectedProductsPage> {
                       icon: Icon(Icons.delete),
                       onPressed: () {
                         setState(() {
-                          widget.selectedProducts.removeAt(index);
+                          // Create a copy of the selectedProducts list and modify the copy
+                          List<Product> selectedProductsCopy =
+                              List.from(widget.selectedProducts);
+                          selectedProductsCopy.removeAt(index);
+                          widget.selectedProducts = selectedProductsCopy;
                         });
                       },
                     ),
@@ -104,7 +108,7 @@ class _SelectedProductsPageState extends State<SelectedProductsPage> {
               child: Center(
                 child: Container(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: _handlePaymentComplete,
                     child: Text('Payment Complete'),
                   ),
                 ),
@@ -163,5 +167,128 @@ class _SelectedProductsPageState extends State<SelectedProductsPage> {
 
   double get _totalAmountWithDiscount {
     return _totalAmount - (_totalAmount * (_discountPercentage / 100));
+  }
+
+  Future<void> _updateProductQuantities() async {
+    final firestore = FirebaseFirestore.instance;
+    final batch = firestore.batch();
+
+    // Create a copy of the selectedProducts list to avoid concurrent modification
+    List<Product> selectedProductsCopy = List.from(widget.selectedProducts);
+
+    for (final product in selectedProductsCopy) {
+      try {
+        final productDoc = firestore
+            .collection('Equipments')
+            .doc("equipments") // Use the category from the product
+            .collection('Items')
+            .doc(product.productId);
+
+        final docSnapshot = await productDoc.get();
+
+        if (docSnapshot.exists) {
+          // Get the current available quantity from the Firestore document
+          int currentAvailableQuantity =
+              int.parse(docSnapshot['quantity'] ?? '0');
+
+          // Calculate the new available quantity after deducting the selected quantity
+          int newAvailableQuantity =
+              currentAvailableQuantity - product.quantity;
+
+          // Add the update operation to the batch
+          batch.update(
+              productDoc, {'quantity': newAvailableQuantity.toString()});
+
+          // Update the product's availableQuantity property in memory to reflect the change
+          int selectedProductIndex = widget.selectedProducts.indexOf(product);
+          widget.selectedProducts[selectedProductIndex].quantity =
+              newAvailableQuantity;
+        } else {
+          final productDoc = firestore
+              .collection('Plants')
+              .doc(product.Category) // Use the category from the product
+              .collection('Items')
+              .doc(product.productId);
+
+          final docSnapshot = await productDoc.get();
+
+          if (docSnapshot.exists) {
+            // Get the current available quantity from the Firestore document
+            int currentAvailableQuantity =
+                int.parse(docSnapshot['quantity'] ?? '0');
+
+            // Calculate the new available quantity after deducting the selected quantity
+            int newAvailableQuantity =
+                currentAvailableQuantity - product.quantity;
+
+            // Add the update operation to the batch
+            batch.update(
+                productDoc, {'quantity': newAvailableQuantity.toString()});
+
+            // Update the product's availableQuantity property in memory to reflect the change
+            int selectedProductIndex = widget.selectedProducts.indexOf(product);
+            widget.selectedProducts[selectedProductIndex].quantity =
+                newAvailableQuantity;
+          }
+        }
+      } catch (error) {
+        print('Error updating quantity for ${product.name}: $error');
+        // Handle the error as needed
+      }
+    }
+
+    // Commit the batch write
+    try {
+      await batch.commit();
+    } catch (error) {
+      print('Error committing batch write: $error');
+      // Handle the error as needed
+    }
+  }
+
+  void _handlePaymentComplete() async {
+    // Calculate total amount with discount first
+    double totalAmountWithDiscount = _totalAmountWithDiscount;
+
+    // Show the AlertDialog to confirm payment completion
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            'Payment Completed',
+            style: (TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Colors.green)),
+          ),
+          content: Text(
+            'Total Amount with Discount: Rs ${totalAmountWithDiscount.toStringAsFixed(2)}',
+            style: (TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the AlertDialog
+
+                // Call the function to update the product quantities in Firestore
+                _updateProductQuantities();
+
+                // Reset the selected products list as the payment is complete
+                setState(() {
+                  widget.selectedProducts.clear();
+                  _totalAmount = 0.0;
+                  _discountPercentage = 0.0;
+                });
+              },
+              child: Text(
+                'OK',
+                style: (TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

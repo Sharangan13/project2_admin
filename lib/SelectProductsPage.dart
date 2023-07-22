@@ -113,7 +113,7 @@ class _SelectProductsPageState extends State<SelectProductsPage> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Quantity: ${product.quantity}'),
+                            Text('Available: ${product.quantity}'),
                             Text('Price: ${product.price.toStringAsFixed(2)}'),
                           ],
                         ),
@@ -146,6 +146,7 @@ class _SelectProductsPageState extends State<SelectProductsPage> {
   void _changeCollection(String collection) {
     setState(() {
       _selectedCollection = collection;
+      _searchQuery = ''; // Reset search query when changing collection
     });
   }
 
