@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'Product.dart';
 import 'SelectedProductsPage.dart';
 
@@ -175,9 +176,11 @@ class _SelectProductsPageState extends State<SelectProductsPage> {
               return DropdownButton<int>(
                 value: selectedQuantity,
                 onChanged: (newValue) {
-                  setState(() {
-                    selectedQuantity = newValue!;
-                  });
+                  if (newValue! > 0) {
+                    setState(() {
+                      selectedQuantity = newValue;
+                    });
+                  }
                 },
                 items: List.generate(maxAvailableQuantity, (index) {
                   return DropdownMenuItem<int>(

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'Product.dart';
+import 'SaleDetails.dart';
 
 class SelectedProductsPage extends StatefulWidget {
   late final List<Product> selectedProducts;
@@ -250,45 +251,90 @@ class _SelectedProductsPageState extends State<SelectedProductsPage> {
     // Calculate total amount with discount first
     double totalAmountWithDiscount = _totalAmountWithDiscount;
 
-    // Show the AlertDialog to confirm payment completion
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            'Payment Completed',
-            style: (TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                color: Colors.green)),
-          ),
-          content: Text(
-            'Total Amount with Discount: Rs ${totalAmountWithDiscount.toStringAsFixed(2)}',
-            style: (TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the AlertDialog
-
-                // Call the function to update the product quantities in Firestore
-                _updateProductQuantities();
-
-                // Reset the selected products list as the payment is complete
-                setState(() {
-                  widget.selectedProducts.clear();
-                  _totalAmount = 0.0;
-                  _discountPercentage = 0.0;
-                });
-              },
-              child: Text(
-                'OK',
-                style: (TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              ),
-            ),
-          ],
-        );
-      },
+    // Create a SaleDetails object
+    SaleDetails saleDetails = SaleDetails(
+      saleId: UniqueKey()
+          .toString(), // You can use any unique identifier for the sale
+      totalAmountWithDiscount: _totalAmountWithDiscount,
+      discountPercentage: _discountPercentage,
+      products: widget.selectedProducts,
+      date: DateTime.now(),
     );
+
+    // Store the SaleDetails in Firestore
+    final firestore = FirebaseFirestore.instance;
+    if (widget.selectedProducts != null &&
+        widget.selectedProducts!.isNotEmpty &&
+        _totalAmount != 0) {
+      try {
+        await firestore
+            .collection('SaleDetails')
+            .doc(saleDetails.saleId)
+            .set(saleDetails.toMap());
+      } catch (error) {
+        print('Error storing SaleDetails in Firestore: $error');
+        // Handle the error as needed
+      }
+    }
+
+    // Show the AlertDialog to confirm payment completion
+    if (_totalAmount == 0) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                'First Calculate the total amount !!!..',
+                style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red),
+              ),
+            );
+          });
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              'Payment Completed',
+              style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green),
+            ),
+            content: Text(
+              'Total Amount with Discount: Rs ${totalAmountWithDiscount.toStringAsFixed(2)}',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the AlertDialog
+
+                  // Call the function to update the product quantities in Firestore
+                  _updateProductQuantities();
+
+                  // Reset the selected products list as the payment is complete
+
+                  if (_totalAmount != 0) {
+                    setState(() {
+                      widget.selectedProducts.clear();
+                      _totalAmount = 0.0;
+                      _discountPercentage = 0.0;
+                    });
+                  }
+                },
+                child: Text(
+                  'OK',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

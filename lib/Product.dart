@@ -12,13 +12,13 @@ class Product {
 
   Product(
       {required this.name,
-      required this.price,
-      required this.imageURL,
-      required this.description,
-      required this.quantity,
-      required this.date,
-      required this.Category,
-      this.productId});
+        required this.price,
+        required this.imageURL,
+        required this.description,
+        required this.quantity,
+        required this.date,
+        required this.Category,
+        this.productId});
 
   factory Product.fromSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
@@ -60,5 +60,15 @@ class Product {
         date: this.date,
         productId: productId,
         Category: Category);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'productId': productId,
+      'name': name,
+      'price': price,
+      'quantity': quantity,
+      'Category': Category,
+    };
   }
 }
